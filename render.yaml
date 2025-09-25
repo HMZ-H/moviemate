@@ -1,0 +1,41 @@
+services:
+  # Backend API Service
+  - type: web
+    name: moviemate-backend
+    env: go
+    plan: free
+    buildCommand: cd backend && go build -o main .
+    startCommand: cd backend && ./main
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: moviemate-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: PORT
+        value: 10000
+
+  # Frontend Web Service
+  - type: web
+    name: moviemate-frontend
+    env: static
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    envVars:
+      - key: VITE_TMDB_API_KEY
+        sync: false
+      - key: VITE_TMDB_READ_ACCESS_TOKEN
+        sync: false
+      - key: VITE_API_URL
+        value: https://moviemate-backend.onrender.com
+
+  # PostgreSQL Database
+  - type: pserv
+    name: moviemate-db
+    plan: free
+    databaseName: moviemate
+    user: moviemate_user
