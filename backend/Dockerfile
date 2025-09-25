@@ -35,7 +35,7 @@ WORKDIR /root/
 COPY --from=builder /app/main .
 
 # Copy any additional files if needed
-COPY --from=builder /app/configs ./configs
+# COPY --from=builder /app/configs ./configs
 
 # Change ownership to appuser
 RUN chown -R appuser:appuser /root/
