@@ -23,7 +23,7 @@ const Watchlist: React.FC = () => {
     if (!token) return;
     
     try {
-      const response = await fetch('/api/watchlist', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ const Watchlist: React.FC = () => {
     if (!token) return;
     
     try {
-      const response = await fetch('/api/watchlist', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

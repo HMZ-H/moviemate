@@ -140,7 +140,7 @@ function MovieDetails() {
     
     setWatchlistLoading(true);
     try {
-      const res = await fetch('/api/watchlist', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/watchlist`, {
         method: isInWatchlist ? 'DELETE' : 'POST',
         headers: { 
           'Authorization': `Bearer ${token}`,

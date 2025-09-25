@@ -19,7 +19,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onToggle }) => {
   React.useEffect(() => {
     const checkConnection = async () => {
       try {
-        const res = await fetch('/health');
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/health`);
         const data = await res.json();
         setIsConnected(res.ok && data.status === 'ok');
         console.log('Backend health check:', data);
@@ -50,7 +50,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onToggle }) => {
     setMessages(prev => [...prev, { role: 'user', content: text }]);
     try {
       console.log('Sending message to backend:', text);
-      const res = await fetch('/api/chat', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text })
