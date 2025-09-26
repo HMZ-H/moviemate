@@ -24,7 +24,7 @@ func NewGeminiChatServiceFromEnv() (*GeminiChatService, error) {
 	}
 	model := os.Getenv("GEMINI_MODEL")
 	if model == "" {
-		model = "gemini-1.5-flash"
+		model = "gemini-1.5-flash-latest"
 	}
 	return &GeminiChatService{apiKey: key, model: model}, nil
 }
