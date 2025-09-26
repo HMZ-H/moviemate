@@ -20,6 +20,18 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onToggle }) => {
     const checkConnection = async () => {
       try {
         console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
+        console.log('Environment check:', {
+          VITE_API_URL: import.meta.env.VITE_API_URL,
+          NODE_ENV: import.meta.env.NODE_ENV,
+          MODE: import.meta.env.MODE
+        });
+        
+        if (!import.meta.env.VITE_API_URL) {
+          console.error('VITE_API_URL is not defined!');
+          setIsConnected(false);
+          return;
+        }
+        
         const url = `${import.meta.env.VITE_API_URL}/health`;
         console.log('Health check URL:', url);
         
@@ -33,12 +45,20 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onToggle }) => {
         });
         clearTimeout(timeoutId);
         
+        console.log('Response status:', res.status);
+        console.log('Response headers:', Object.fromEntries(res.headers.entries()));
+        
         const data = await res.json();
         setIsConnected(res.ok && data.status === 'ok');
         console.log('Backend health check:', data);
       } catch (e) {
         setIsConnected(false);
         console.error('Backend connection failed:', e);
+        console.error('Error details:', {
+          name: e instanceof Error ? e.name : 'Unknown',
+          message: e instanceof Error ? e.message : String(e),
+          stack: e instanceof Error ? e.stack : undefined
+        });
       }
     };
     checkConnection();
