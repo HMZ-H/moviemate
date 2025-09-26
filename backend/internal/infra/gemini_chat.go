@@ -36,7 +36,7 @@ func (s *GeminiChatService) GenerateReply(prompt string) (string, error) {
 	// Log the request for debugging
 	fmt.Printf("Gemini request - Model: %s, Prompt: %s\n", s.model, prompt)
 	
-	endpoint := fmt.Sprintf("https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent?key=%s", s.model, s.apiKey)
+	endpoint := fmt.Sprintf("https://generativelanguage.googleapis.com/v1/models/%s:generateContent?key=%s", s.model, s.apiKey)
 	sys := os.Getenv("GEMINI_SYSTEM_PROMPT")
 	if sys == "" {
 		sys = "You are MovieMate, a super friendly movie buddy! 🎬 When someone says 'hi', respond with excitement like 'Hey there! 🎬 What's your vibe tonight? Looking for something to make you laugh, cry, or jump out of your seat?' Be casual, use emojis, and show personality. Keep responses under 100 words and be specific with movie recommendations (title + year + why it's perfect)."
