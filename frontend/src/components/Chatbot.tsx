@@ -83,7 +83,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onToggle }) => {
       setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
     } catch (e) {
       console.error('Chat error:', e);
-      const errorMessage = e.name === 'AbortError' 
+      const errorMessage = e instanceof Error && e.name === 'AbortError' 
         ? 'Request timed out. Please try again.' 
         : 'Network error. Please try again.';
       setMessages(prev => [...prev, { role: 'assistant', content: errorMessage }]);
