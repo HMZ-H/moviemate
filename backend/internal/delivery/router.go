@@ -72,9 +72,13 @@ func SetupRouter() *gin.Engine {
 		}
 		r.GET("/health", func(c *gin.Context) { c.JSON(200, gin.H{"status": "ok", "provider": "gemini"}) })
 	r.GET("/debug", func(c *gin.Context) { 
+		model := os.Getenv("GEMINI_MODEL")
+		if model == "" {
+			model = "gemini-1.5-flash (default)"
+		}
 		c.JSON(200, gin.H{
 			"gemini_api_key_set": os.Getenv("GEMINI_API_KEY") != "",
-			"gemini_model": os.Getenv("GEMINI_MODEL"),
+			"gemini_model": model,
 			"gemini_system_prompt_set": os.Getenv("GEMINI_SYSTEM_PROMPT") != "",
 		})
 	})
