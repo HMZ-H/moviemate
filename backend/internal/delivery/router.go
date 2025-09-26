@@ -10,12 +10,26 @@ import (
 	"github.com/HMZ-H/moviemate/internal/repository"
 	tollbooth "github.com/didip/tollbooth/v7"
 	tollbooth_gin "github.com/didip/tollbooth_gin"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 // SetupRouter configures the HTTP routes
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
+
+	// Configure CORS
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{
+		"http://localhost:3000",
+		"http://localhost:5173", 
+		"http://localhost:5174",
+		"https://moviemate-frontend.onrender.com", // Add your deployed frontend URL
+	}
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
+	config.AllowCredentials = true
+	r.Use(cors.New(config))
 
 	// Initialize database and repository
 	db, err := infra.NewDB()

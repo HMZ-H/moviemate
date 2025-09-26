@@ -19,7 +19,10 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onToggle }) => {
   React.useEffect(() => {
     const checkConnection = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/health`);
+        console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
+        const url = `${import.meta.env.VITE_API_URL}/health`;
+        console.log('Health check URL:', url);
+        const res = await fetch(url);
         const data = await res.json();
         setIsConnected(res.ok && data.status === 'ok');
         console.log('Backend health check:', data);
