@@ -74,7 +74,7 @@ func SetupRouter() *gin.Engine {
 	r.GET("/debug", func(c *gin.Context) { 
 		model := os.Getenv("GEMINI_MODEL")
 		if model == "" {
-			model = "gemini-1.5-flash (default)"
+			model = "gemini-1.5-pro (default)"
 		}
 		c.JSON(200, gin.H{
 			"gemini_api_key_set": os.Getenv("GEMINI_API_KEY") != "",

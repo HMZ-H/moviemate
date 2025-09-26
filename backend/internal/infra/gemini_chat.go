@@ -24,7 +24,7 @@ func NewGeminiChatServiceFromEnv() (*GeminiChatService, error) {
 	}
 	model := os.Getenv("GEMINI_MODEL")
 	if model == "" {
-		model = "gemini-1.5-flash"
+		model = "gemini-1.5-pro"
 	}
 	return &GeminiChatService{apiKey: key, model: model}, nil
 }
@@ -35,7 +35,7 @@ func (s *GeminiChatService) GenerateReply(prompt string) (string, error) {
 
 	// Log the request for debugging
 	fmt.Printf("Gemini request - Model: %s, Prompt: %s\n", s.model, prompt)
-	
+
 	endpoint := fmt.Sprintf("https://generativelanguage.googleapis.com/v1/models/%s:generateContent?key=%s", s.model, s.apiKey)
 	sys := os.Getenv("GEMINI_SYSTEM_PROMPT")
 	if sys == "" {
