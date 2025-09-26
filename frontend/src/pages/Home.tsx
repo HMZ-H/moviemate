@@ -145,7 +145,7 @@ useEffect(() => {
   return (
     <div className="w-screen min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-x-hidden">
       {/* Hero Section - Full Width */}
-      <div className="relative w-full overflow-hidden h-[75vh]">
+      <div className="relative w-full overflow-hidden h-[80vh]">
         {/* Image Background */}
         {heroImage && !imageError && showImageBackground && (
           <div className="absolute inset-0 bg-cover bg-center"
