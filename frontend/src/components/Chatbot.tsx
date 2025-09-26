@@ -13,56 +13,6 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onToggle }) => {
   const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>([
     { role: 'assistant', content: "Hey there! 🎬 I'm your movie buddy! What's your vibe tonight? Looking for something to make you laugh, cry, or jump out of your seat?" }
   ]);
-  const [isConnected, setIsConnected] = useState<boolean | null>(null);
-
-  // Check backend connection on component mount
-  React.useEffect(() => {
-    const checkConnection = async () => {
-      try {
-        console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
-        console.log('Environment check:', {
-          VITE_API_URL: import.meta.env.VITE_API_URL,
-          NODE_ENV: import.meta.env.NODE_ENV,
-          MODE: import.meta.env.MODE
-        });
-        
-        if (!import.meta.env.VITE_API_URL) {
-          console.error('VITE_API_URL is not defined!');
-          setIsConnected(false);
-          return;
-        }
-        
-        const url = `${import.meta.env.VITE_API_URL}/health`;
-        console.log('Health check URL:', url);
-        
-        // Add timeout to prevent hanging
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-        
-        const res = await fetch(url, { 
-          signal: controller.signal,
-          headers: { 'Accept': 'application/json' }
-        });
-        clearTimeout(timeoutId);
-        
-        console.log('Response status:', res.status);
-        console.log('Response headers:', Object.fromEntries(res.headers.entries()));
-        
-        const data = await res.json();
-        setIsConnected(res.ok && data.status === 'ok');
-        console.log('Backend health check:', data);
-      } catch (e) {
-        setIsConnected(false);
-        console.error('Backend connection failed:', e);
-        console.error('Error details:', {
-          name: e instanceof Error ? e.name : 'Unknown',
-          message: e instanceof Error ? e.message : String(e),
-          stack: e instanceof Error ? e.stack : undefined
-        });
-      }
-    };
-    checkConnection();
-  }, []);
 
   const quickOptions = [
     "I want something mind-blowing! 🤯",
@@ -155,11 +105,6 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onToggle }) => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-sm">MovieBot</h3>
-                  <p className="text-xs text-green-100">
-                    {isConnected === null ? 'Connecting...' : 
-                     isConnected ? 'AI Assistant Ready' : 
-                     'Backend Offline'}
-                  </p>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
