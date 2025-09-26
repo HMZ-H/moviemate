@@ -33,6 +33,9 @@ func (s *GeminiChatService) GenerateReply(prompt string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
+	// Log the request for debugging
+	fmt.Printf("Gemini request - Model: %s, Prompt: %s\n", s.model, prompt)
+	
 	endpoint := fmt.Sprintf("https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent?key=%s", s.model, s.apiKey)
 	sys := os.Getenv("GEMINI_SYSTEM_PROMPT")
 	if sys == "" {
@@ -68,6 +71,7 @@ func (s *GeminiChatService) GenerateReply(prompt string) (string, error) {
 			Error any `json:"error"`
 		}
 		_ = json.NewDecoder(resp.Body).Decode(&errBody)
+		fmt.Printf("Gemini API error - Status: %d, Body: %v\n", resp.StatusCode, errBody.Error)
 		return "", fmt.Errorf("gemini error status=%d body=%v", resp.StatusCode, errBody.Error)
 	}
 
@@ -84,7 +88,10 @@ func (s *GeminiChatService) GenerateReply(prompt string) (string, error) {
 		return "", err
 	}
 	if len(gr.Candidates) == 0 || len(gr.Candidates[0].Content.Parts) == 0 {
+		fmt.Printf("Gemini API returned no candidates\n")
 		return "", errors.New("no candidates returned")
 	}
-	return gr.Candidates[0].Content.Parts[0].Text, nil
+	response := gr.Candidates[0].Content.Parts[0].Text
+	fmt.Printf("Gemini response: %s\n", response)
+	return response, nil
 }

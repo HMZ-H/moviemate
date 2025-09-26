@@ -34,13 +34,13 @@ func (h *ChatHandler) HandleChat(c *gin.Context) {
 	reply, err := h.chatSvc.GenerateReply(req.Message)
 	if err != nil {
 		log.Printf("chat generate error: %v", err)
-		// Debug mode: expose exact error for troubleshooting
+		// Always return the error in development, but provide a better fallback in production
 		if os.Getenv("CHAT_DEBUG") == "1" || os.Getenv("CHAT_DEBUG") == "true" {
 			c.JSON(stdhttp.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		// Graceful fallback: provide a simple reply instead of 500
-		c.JSON(stdhttp.StatusOK, ChatResponse{Reply: "Tell me what kind of movies you like, and I'll suggest some!"})
+		// Better fallback message that's more engaging
+		c.JSON(stdhttp.StatusOK, ChatResponse{Reply: "Hey there! 🎬 I'm having a small technical hiccup, but I'm still here to help! What kind of movies are you in the mood for? Action? Comedy? Romance? Just tell me what you're feeling!"})
 		return
 	}
 	c.JSON(stdhttp.StatusOK, ChatResponse{Reply: reply})
