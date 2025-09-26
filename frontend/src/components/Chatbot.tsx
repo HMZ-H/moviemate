@@ -11,7 +11,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onToggle }) => {
   const [input, setInput] = useState<string>("");
   const [isSending, setIsSending] = useState<boolean>(false);
   const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>([
-    { role: 'assistant', content: "Hi! I can recommend movies. Tell me what you like." }
+    { role: 'assistant', content: "Hey there! 🎬 I'm your movie buddy! What's your vibe tonight? Looking for something to make you laugh, cry, or jump out of your seat?" }
   ]);
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
 
@@ -35,16 +35,16 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onToggle }) => {
   }, []);
 
   const quickOptions = [
-    "Recommend top sci‑fi on Netflix",
-    "Best feel‑good comedy tonight",
-    "Trending movies this week",
-    "Underrated thrillers 2015‑2020",
-    "Family‑friendly adventure under 2 hours",
-    "Similar to Inception",
-    "New releases on Prime Video",
-    "Best anime movies of all time",
-    "Cozy rom‑coms with high ratings",
-    "Mind‑bending sci‑fi but not too dark"
+    "I want something mind-blowing! 🤯",
+    "Make me laugh tonight! 😂",
+    "What's everyone watching? 🔥",
+    "Hidden gems I've never heard of",
+    "Something for the whole family 👨‍👩‍👧‍👦",
+    "Movies like Inception but better",
+    "What's new and exciting? ✨",
+    "Best animated movies ever 🎨",
+    "Sweet romantic movies 💕",
+    "Sci-fi that won't give me nightmares"
   ];
 
   const sendMessage = async (text: string) => {
