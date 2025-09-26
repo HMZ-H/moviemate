@@ -2,7 +2,7 @@ package delivery
 
 import (
 	"fmt"
-
+	"os"
 	"time"
 
 	deliveryhttp "github.com/HMZ-H/moviemate/internal/delivery/http"
@@ -71,6 +71,13 @@ func SetupRouter() *gin.Engine {
 			api.POST("/chat", tollbooth_gin.LimitHandler(limiter), chatHandler.HandleChat)
 		}
 		r.GET("/health", func(c *gin.Context) { c.JSON(200, gin.H{"status": "ok", "provider": "gemini"}) })
+	r.GET("/debug", func(c *gin.Context) { 
+		c.JSON(200, gin.H{
+			"gemini_api_key_set": os.Getenv("GEMINI_API_KEY") != "",
+			"gemini_model": os.Getenv("GEMINI_MODEL"),
+			"gemini_system_prompt_set": os.Getenv("GEMINI_SYSTEM_PROMPT") != "",
+		})
+	})
 		return r
 	}
 
