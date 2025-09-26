@@ -24,7 +24,7 @@ func SetupRouter() *gin.Engine {
 		"http://localhost:3000",
 		"http://localhost:5173", 
 		"http://localhost:5174",
-		"https://moviemate-frontend.onrender.com", // Add your deployed frontend URL
+		"https://moviemate-frontend-txyl.onrender.com", // Your actual deployed frontend URL
 	}
 	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
