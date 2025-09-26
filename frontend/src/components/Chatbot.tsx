@@ -22,7 +22,17 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onToggle }) => {
         console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
         const url = `${import.meta.env.VITE_API_URL}/health`;
         console.log('Health check URL:', url);
-        const res = await fetch(url);
+        
+        // Add timeout to prevent hanging
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+        
+        const res = await fetch(url, { 
+          signal: controller.signal,
+          headers: { 'Accept': 'application/json' }
+        });
+        clearTimeout(timeoutId);
+        
         const data = await res.json();
         setIsConnected(res.ok && data.status === 'ok');
         console.log('Backend health check:', data);
@@ -53,11 +63,19 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onToggle }) => {
     setMessages(prev => [...prev, { role: 'user', content: text }]);
     try {
       console.log('Sending message to backend:', text);
+      
+      // Add timeout to prevent hanging
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+      
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text })
+        body: JSON.stringify({ message: text }),
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
+      
       console.log('Response status:', res.status);
       const data = await res.json();
       console.log('Response data:', data);
@@ -65,7 +83,10 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onToggle }) => {
       setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
     } catch (e) {
       console.error('Chat error:', e);
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Network error. Please try again.' }]);
+      const errorMessage = e.name === 'AbortError' 
+        ? 'Request timed out. Please try again.' 
+        : 'Network error. Please try again.';
+      setMessages(prev => [...prev, { role: 'assistant', content: errorMessage }]);
     } finally {
       setIsSending(false);
     }
